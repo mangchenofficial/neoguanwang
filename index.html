@@ -19,6 +19,7 @@
             --code-text: #E2E6E9;
             --quote-bg: #F4F8F5;
             --max-width: 800px;
+            --bg-image: none;
         }
 
         * {
@@ -46,6 +47,7 @@
             width: 100%;
             height: 100%;
             z-index: -1;
+            background-image: var(--bg-image, none);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -787,7 +789,7 @@
             'https://images.wallpaperscraft.com/image/single/girl_umbrella_anime_141156_1920x1080.jpg'
         ];
         const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
-        document.body.style.backgroundImage = `url('${randomBg}')`;
+        document.body.style.setProperty('--bg-image', `url('${randomBg}')`);
         
         let lastPage = 'home';
 
