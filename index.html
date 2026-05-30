@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芒辰のブログ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F7F5;
+            --card-bg: #FFFFFF;
+            --text-primary: #3A4A3F;
+            --text-link: #8DB5A7;
+            --text-link-hover: #5B8C7A;
+            --border-light: #E2E6E9;
+            --accent-soft: #C9E4DE;
+            --code-bg: #2D3A32;
+            --code-text: #E2E6E9;
+            --quote-bg: #F4F8F5;
+            --max-width: 800px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .article-card:nth-child(1) { animation-delay: 0.1s; }
+        .article-card:nth-child(2) { animation-delay: 0.2s; }
+        .article-card:nth-child(3) { animation-delay: 0.3s; }
+        .article-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .article-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--text-link);
+        }
+
+        .about-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .about-card:nth-child(1) { animation-delay: 0.1s; }
+        .about-card:nth-child(2) { animation-delay: 0.2s; }
+        .about-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .about-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-5px);
+            border-color: var(--text-link);
+        }
+
+        .friend-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .friend-card:nth-child(1) { animation-delay: 0.1s; }
+
+        .friend-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--text-link);
+        }
+
+        nav {
+            padding: 24px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            background-color: rgba(249, 247, 245, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        nav a {
+            display: inline-block;
+            margin: 0 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 228, 222, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            transform: scale(1.05);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-link);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .back-link:hover {
+            color: var(--text-link-hover);
+            background-color: var(--accent-soft);
+            transform: translateX(-5px);
+        }
+
+        .back-link svg {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 8px 32px rgba(58, 74, 63, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .article-full {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: var(--text-link);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .article-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-title a:hover {
+            color: var(--text-link-hover);
+        }
+
+        .article-excerpt {
+            font-size: 1rem;
+            color: var(--text-primary);
+            opacity: 0.85;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .article-content {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .article-content p {
+            margin-bottom: 16px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-link);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: transparent;
+        }
+
+        .read-more:hover {
+            color: var(--text-link-hover);
+            background-color: var(--accent-soft);
+            transform: translateX(5px);
+        }
+
+        .read-more svg {
+            margin-left: 6px;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover svg {
+            transform: translateX(5px);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(141, 181, 167, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 0 60px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 48px;
+            font-size: 0.85rem;
+            color: var(--text-link);
+        }
+
+        footer a {
+            color: var(--text-link-hover);
+            text-decoration: none;
+        }
+
+        .social-links {
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            color: var(--text-link);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-links a:hover {
+            color: var(--text-link-hover);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .social-links svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .about-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        .about-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .about-text {
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .about-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .friend-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .friend-card:hover {
+            box-shadow: 0 8px 32px rgba(58, 74, 63, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .friend-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .friend-desc {
+            font-size: 0.85rem;
+            color: var(--text-link);
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-top: 32px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .article-card, .article-full {
+                padding: 28px;
+            }
+
+            .article-title {
+                font-size: 1.3rem;
+            }
+
+            nav a {
+                margin: 0 6px;
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .about-card {
+                padding: 28px;
+            }
+
+            .about-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a class="nav-link active" data-page="home">首页</a>
+            <a class="nav-link" data-page="about">关于</a>
+            <a class="nav-link" data-page="friends">友链</a>
+        </nav>
+
+        <div id="home" class="page active">
+            <main style="padding-top: 40px;">
+                <article class="article-card">
+                    <div class="article-meta">2026年5月31日 · 创作随想</div>
+                    <h2 class="article-title">
+                        <a href="#post-1" onclick="showPost('post-1'); return false;">NeoUI 的诞生：一个初中生的前端探索</a>
+                    </h2>
+                    <p class="article-excerpt">
+                        从第一次接触代码到现在，我一直在尝试用前端技术做出好看又实用的东西。NeoUI 是我最近在做的一个 HTML 伪系统项目，模拟手机系统的界面，虽然还在起步阶段，但每一次迭代都让我学到很多...
+                    </p>
+                    <div style="margin-bottom: 16px;">
+                        <span class="tag">NeoUI</span>
+                        <span class="tag">前端</span>
+                        <span class="tag">开源</span>
+                    </div>
+                    <a href="#post-1" class="read-more" onclick="showPost('post-1'); return false;">
+                        阅读全文
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-meta">2026年5月28日 · 视频创作</div>
+                    <h2 class="article-title">
+                        <a href="#post-2" onclick="showPost('post-2'); return false;">关于我的视频创作与猎奇系列</a>
+                    </h2>
+                    <p class="article-excerpt">
+                        在 B 站做视频是一件很有意思的事情。我的猎奇系列吸引了不少同好，每次打开评论区看到大家的反馈，都觉得坚持更新是值得的。上学期间尽量保持每周一更...
+                    </p>
+                    <div style="margin-bottom: 16px;">
+                        <span class="tag">B站</span>
+                        <span class="tag">视频</span>
+                        <span class="tag">猎奇</span>
+                    </div>
+                    <a href="#post-2" class="read-more" onclick="showPost('post-2'); return false;">
+                        阅读全文
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-meta">2026年5月20日 · 技术笔记</div>
+                    <h2 class="article-title">
+                        <a href="#post-3" onclick="showPost('post-3'); return false;">搭建这个博客的那些事</a>
+                    </h2>
+                    <p class="article-excerpt">
+                        从域名申请到页面部署，每一步都充满了小小的惊喜。Cloudflare 的 DNS 配置、Cloudflare Pages + GitHub 部署，终于让 neocn.qzz.io 上线了...
+                    </p>
+                    <div style="margin-bottom: 16px;">
+                        <span class="tag">部署</span>
+                        <span class="tag">域名</span>
+                        <span class="tag">博客</span>
+                    </div>
+                    <a href="#post-3" class="read-more" onclick="showPost('post-3'); return false;">
+                        阅读全文
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </article>
+
+                <article class="article-card">
+                    <div class="article-meta">2026年5月15日 · 系统开发</div>
+                    <h2 class="article-title">
+                        <a href="#post-4" onclick="showPost('post-4'); return false;">从零构建我的自研操作系统 NEO OS</a>
+                    </h2>
+                    <p class="article-excerpt">
+                        用 C 和汇编从零构建了一个 32 位操作系统！支持内存管理、文件系统、图形桌面、窗口系统...一个初中生的操作系统开发之路...
+                    </p>
+                    <div style="margin-bottom: 16px;">
+                        <span class="tag">C语言</span>
+                        <span class="tag">汇编</span>
+                        <span class="tag">操作系统</span>
+                    </div>
+                    <a href="#post-4" class="read-more" onclick="showPost('post-4'); return false;">
+                        阅读全文
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                </article>
+            </main>
+        </div>
+
+        <div id="post-1" class="page">
+            <main style="padding-top: 40px;">
+                <a class="back-link" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    返回
+                </a>
+                <article class="article-full">
+                    <div class="article-meta">2026年5月31日 · 创作随想</div>
+                    <h1 class="article-title">NeoUI 的诞生：一个初中生的前端探索</h1>
+                    <div style="margin-bottom: 24px;">
+                        <span class="tag">NeoUI</span>
+                        <span class="tag">前端</span>
+                        <span class="tag">开源</span>
+                    </div>
+                    <div class="article-content">
+                        <p>从第一次接触代码到现在，我一直在尝试用前端技术做出好看又实用的东西。NeoUI 是我最近在做一个 HTML 伪系统，虽然还在起步阶段，但每一次迭代都让我学到很多。</p>
+                        <p>一开始，我只是单纯地喜欢做网页，看到别人做出漂亮的界面就很羡慕。后来慢慢学习 HTML、CSS、JavaScript，开始尝试自己写一些有趣的功能。渐渐地发现，做一个类似操作系统的网页应用好像挺有意思的，于是就有了现在的 NeoUI。</p>
+                        <p>NeoUI 是一个基于 HTML 的伪系统，模拟了手机系统的界面和交互方式。我希望它能够让用户在网页上体验到类似手机系统的感觉，同时也能让新手通过学习它的源码来掌握前端技术。</p>
+                        <p>在开发过程中，我遇到了很多挑战：应用切换、下拉通知栏、锁屏交互、主题切换功能等等。每一个问题的解决都让我对前端有了更深的理解。虽然进度比较慢，但我相信只要坚持做下去，总会越来越好的。</p>
+                        <p>如果你对 NeoUI 感兴趣，欢迎加入我们的 QQ 群 1067851526，一起交流技术，共同成长！</p>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <div id="post-2" class="page">
+            <main style="padding-top: 40px;">
+                <a class="back-link" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    返回
+                </a>
+                <article class="article-full">
+                    <div class="article-meta">2026年5月28日 · 视频创作</div>
+                    <h1 class="article-title">关于我的视频创作与猎奇系列</h1>
+                    <div style="margin-bottom: 24px;">
+                        <span class="tag">B站</span>
+                        <span class="tag">视频</span>
+                        <span class="tag">猎奇</span>
+                    </div>
+                    <div class="article-content">
+                        <p>在 B 站做视频是一件很有意思的事情。我的猎奇系列吸引了不少同好，每次打开评论区看到大家的反馈，都觉得坚持更新是值得的。</p>
+                        <p>一开始做视频的初衷很简单，就是想把一些自己觉得有趣的内容分享给大家。猎奇系列是我最喜欢做的类型，因为可以探索很多平时不为人知的事物，这种发现未知的感觉让我很着迷。</p>
+                        <p>虽然学业比较忙，作为一名初中生，我需要在学习和创作之间找到平衡，但我还是会尽量在周末挤出时间来做视频。我的视频几乎不需要什么后期加工，简单剪辑就可以发布，保持最原始的风格...</p>
+                        <p>感谢每一个支持我的朋友，是你们的鼓励让我有动力继续做下去。如果你想催更或者交流，可以在猎奇系列的 QQ 群 1078247710 找到我。</p>
+                        <p>未来我会继续探索更多有趣的内容，也希望能够尝试更多不同风格的视频类型。敬请期待！</p>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <div id="post-3" class="page">
+            <main style="padding-top: 40px;">
+                <a class="back-link" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    返回
+                </a>
+                <article class="article-full">
+                    <div class="article-meta">2026年5月20日 · 技术笔记</div>
+                    <h1 class="article-title">搭建这个博客的那些事</h1>
+                    <div style="margin-bottom: 24px;">
+                        <span class="tag">部署</span>
+                        <span class="tag">域名</span>
+                        <span class="tag">博客</span>
+                    </div>
+                    <div class="article-content">
+                        <p>从域名申请到页面部署，每一步都充满了小小的惊喜。Cloudflare 的 DNS 配置、Cloudflare Pages + GitHub 部署，终于让 neocn.qzz.io 上线了。</p>
+                        <p>其实这个博客的搭建过程并不复杂，但每一个小步骤都让我学到了新东西。首先是域名的选择，neocn 这个名字既代表了我的昵称首字母，也象征着 "New Era of CN"——中国新生代的力量。</p>
+                        <p>在部署方面，我使用了 GitHub 托管源码，Cloudflare Pages 自动部署。绑定域名后，Cloudflare 会自动配置 HTTPS 证书，整个过程非常简单。</p>
+                        <p>配色是我最满意的部分。低饱和度、自然、耐看，每次看到这套配色，都能让心情变得平静。</p>
+                        <p>整个过程让我学到了很多关于域名解析、持续集成部署的前端以外的知识。也让我意识到，搭建一个网站不仅仅是写代码那么简单，还有很多周边的知识需要了解。</p>
+                        <p>希望这个博客能够成为一个记录我成长的地方，也希望它能帮助到想要搭建自己博客的朋友们。</p>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <div id="post-4" class="page">
+            <main style="padding-top: 40px;">
+                <a class="back-link" onclick="goBack()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    返回
+                </a>
+                <article class="article-full">
+                    <div class="article-meta">2026年5月15日 · 系统开发</div>
+                    <h1 class="article-title">从零构建我的自研操作系统 NEO OS</h1>
+                    <div style="margin-bottom: 24px;">
+                        <span class="tag">C语言</span>
+                        <span class="tag">汇编</span>
+                        <span class="tag">操作系统</span>
+                    </div>
+                    <div class="article-content">
+                        <p>用 C 和汇编从零构建了一个 32 位操作系统！NEO OS 是一个从零构建的 32 位操作系统，运行在 x86 架构上。虽然还有很多不完善的地方，但已经具备了一个现代操作系统的核心要件。</p>
+                        <p><strong>引导与内核基础：</strong>引导程序 (boot.asm) 实模式启动，启用 A20 地址线，设置 GDT，切换到 32 位保护模式。内核入口 (kernel.c) 系统初始化总控，GDT/IDT 已建立，CPU 异常和硬件中断均有处理入口。</p>
+                        <p><strong>内存管理：</strong>通过 BIOS int 0x15, eax=0xE820 在实模式下获取内存映射。基于位图的 4KB 页框分配器，支持 page_alloc() 和 page_free()。Bump Allocator 实现 kmalloc() 和 kfree()，用于内核动态内存分配。</p>
+                        <p><strong>显示系统：</strong>VGA 文本模式早期使用，支持 print()、println()、clear_screen()。VGA 图形模式 0x13：320×200×256 色。视频驱动提供 putpixel()、fill_rect()、draw_char()、draw_string()，支持双缓冲。桌面环境包含深色背景 + 顶部任务栏 + 4 个桌面图标。窗口管理支持创建窗口、拖拽移动、关闭按钮、点击置顶。</p>
+                        <p><strong>输入系统：</strong>PS/2 键盘驱动使用轮询方式读取扫描码并转换为 ASCII。PS/2 鼠标驱动轮询方式读取 3 字节数据包，绘制简单光标。</p>
+                        <p><strong>文件系统：</strong>虚拟文件系统 (VFS) 抽象了 open()、read()、close()、readdir() 接口。FAT12 实现支持 1.44MB 软盘镜像格式，可读取根目录、遍历 FAT 表、读取文件内容。Shell 命令 ls、cat 已实现。</p>
+                        <p><strong>Shell 与命令：</strong>文本模式 Shell 支持命令历史和执行，可用命令包括 help、clear、echo、about、meminfo、time、ls、cat、run 等。</p>
+                        <p><strong>当前进度：</strong>已实现稳定的引导、32 位保护模式、VGA 文本/图形输出、内存管理、文件系统、文本 Shell。图形化 Shell 正在开发中，键盘中断稳定性待修复，高分辨率适配未完成。</p>
+                        <p>作为一个初中生，这个项目让我学到了很多底层知识。虽然还有很长的路要走，但我会继续坚持下去！</p>
+                    </div>
+                </article>
+            </main>
+        </div>
+
+        <div id="about" class="page">
+            <main style="padding-top: 40px;">
+                <div class="about-card">
+                    <h2 class="about-title">关于我</h2>
+                    <p class="about-text">
+                        大家好，我是芒辰，是一名初中生创作者。从小就對技术和创意充满兴趣，现在主要活跃在 B 站，喜欢做各种有趣的视频内容。
+                    </p>
+                    <p class="about-text">
+                        我目前有两个主要的创作方向：一是 <strong>NeoUI</strong>，这是一个我在开发的 HTML 伪系统，模拟手机系统的界面；二是 <strong>猎奇系列</strong> 视频，这是我在 B 站的个人创作，分享一些有趣或冷门的内容。
+                    </p>
+                    <p class="about-text">
+                        作为一名初中生，我需要在学业和创作之间找到平衡。上学期间我会尽量保持每周一更的节奏，假期可能会有更多时间投入创作。如果你喜欢我的内容，欢迎在 B 站关注我！
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h2 class="about-title">我的项目</h2>
+                    <p class="about-text">
+                        <strong>NEO OS</strong> - 用 C 和汇编从零构建的 32 位操作系统，运行在 x86 架构上。支持内存管理、文件系统、图形桌面、窗口系统、VGA 图形模式、PS/2 键盘鼠标输入、FAT12 文件系统、Shell 命令等功能。目前在 QEMU 上稳定运行。
+                    </p>
+                    <p class="about-text">
+                        <strong>NeoUI</strong> - 一个正在开发中的 HTML 伪系统，模拟手机系统的界面和交互方式。包含应用管理、下拉通知栏、锁屏界面、主题切换等功能，可以在网页上体验手机系统的感觉。目前还在早期开发阶段，欢迎有兴趣的朋友加入一起完善。
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h2 class="about-title">联系方式</h2>
+                    <p class="about-text">
+                        如果你有任何问题或者想交流技术，欢迎通过以下方式联系我：
+                    </p>
+                    <p class="about-text">
+                        • NeoUI QQ群：<strong>1067851526</strong><br>
+                        • 猎奇系列催更 QQ群：<strong>1078247710</strong><br>
+                        • B站：<a href="https://space.bilibili.com/2009275394" target="_blank" style="color: var(--text-link-hover);">芒辰Official</a>
+                    </p>
+                </div>
+            </main>
+        </div>
+
+        <div id="friends" class="page">
+            <main style="padding-top: 40px;">
+                <h2 class="section-title">友情链接</h2>
+                <div class="friends-grid">
+                    <a href="https://space.bilibili.com/2009275394" target="_blank" class="friend-card">
+                        <div class="friend-name">芒辰Official</div>
+                        <div class="friend-desc">B站主页</div>
+                    </a>
+                    <a href="https://b23.tv/JY4u7IL" target="_blank" class="friend-card">
+                        <div class="friend-name">喜灰之最</div>
+                        <div class="friend-desc">B站UP主</div>
+                    </a>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://space.bilibili.com/2009275394" target="_blank" rel="noopener noreferrer" title="Bilibili">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.659.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
+                    </svg>
+                </a>
+                <a href="https://qm.qq.com/q/VDzk5C0dwe" target="_blank" rel="noopener noreferrer" title="QQ">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.003 2c-2.265 0-6.29 1.364-6.29 7.325v1.195S3.55 14.96 3.55 17.474c0 .665.17 1.025.281 1.025.114 0 .902-.484 1.748-2.072 0 0-.18 2.197 1.904 3.967 0 0-1.77.495-1.77 1.182 0 .686 4.078.43 6.29.43 2.21 0 6.287.257 6.287-.43 0-.687-1.768-1.182-1.768-1.182 2.085-1.77 1.905-3.967 1.905-3.967.845 1.588 1.634 2.072 1.746 2.072.111 0 .283-.36.283-1.025 0-2.514-2.166-6.954-2.166-6.954V9.325C18.29 3.364 14.268 2 12.003 2z"/>
+                    </svg>
+                </a>
+            </div>
+            <p> 芒辰 · 初中生创作者的个人空间</p>
+            <p style="margin-top: 8px;">NeoUI QQ群: 1067851526 · 猎奇催更群: 1078247710</p>
+        </footer>
+    </div>
+
+    <script>
+        let lastPage = 'home';
+
+        function showPage(pageId) {
+            lastPage = pageId;
+            const targetPage = document.getElementById(pageId);
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.querySelectorAll('.article-card, .about-card, .friend-card').forEach(card => {
+                    card.style.animation = 'none';
+                    card.offsetHeight;
+                    card.style.animation = null;
+                });
+            });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            targetPage.classList.add('active');
+            
+            const navLink = document.querySelector(`[data-page="${pageId}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + pageId);
+        }
+
+        function showPost(postId) {
+            lastPage = document.querySelector('.nav-link.active')?.dataset.page || 'home';
+            if (lastPage === postId) lastPage = 'home';
+            
+            const targetPage = document.getElementById(postId);
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.querySelectorAll('.article-card, .about-card, .friend-card').forEach(card => {
+                    card.style.animation = 'none';
+                    card.offsetHeight;
+                    card.style.animation = null;
+                });
+            });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            targetPage.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + postId);
+        }
+
+        function goBack() {
+            showPage(lastPage);
+            if (lastPage === 'post-1' || lastPage === 'post-2' || lastPage === 'post-3' || lastPage === 'post-4') {
+                lastPage = 'home';
+            }
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                showPage(this.dataset.page);
+            });
+        });
+
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.slice(1);
+            if (hash && document.getElementById(hash)) {
+                if (hash === 'home' || hash === 'about' || hash === 'friends') {
+                    showPage(hash);
+                } else {
+                    showPost(hash);
+                }
+            } else {
+                showPage('home');
+            }
+        });
+
+        window.addEventListener('load', function() {
+            const hash = window.location.hash.slice(1);
+            if (hash && document.getElementById(hash)) {
+                if (hash === 'home' || hash === 'about' || hash === 'friends') {
+                    showPage(hash);
+                } else {
+                    showPost(hash);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
