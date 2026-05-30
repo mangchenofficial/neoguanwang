@@ -19,7 +19,6 @@
             --code-text: #E2E6E9;
             --quote-bg: #F4F8F5;
             --max-width: 800px;
-            --bg-image: none;
         }
 
         * {
@@ -47,11 +46,9 @@
             width: 100%;
             height: 100%;
             z-index: -1;
-            background-image: var(--bg-image, none);
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
             opacity: 0.7;
         }
 
@@ -779,21 +776,43 @@
     </div>
 
     <script>
+        const bgImages = [
+            'https://images.wallpaperscraft.com/image/sakura_art_sky_122545_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_hood_ears_1013418_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_glow_eyes_1108829_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_kitten_flower_141058_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/piano_silhouette_space_156662_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/silhouette_night_starry_sky_137292_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/warrior_katana_anime_1075388_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_umbrella_anime_141156_1920x1080.jpg'
+        ];
+        const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
+        document.body.style.backgroundImage = `url('${randomBg}')`;
+        
         let lastPage = 'home';
 
-        function setRandomBg() {
-            const bgImages = [
-                'https://images.wallpaperscraft.com/image/single/sakura_art_sky_122545_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/girl_hood_ears_1013418_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/girl_glow_eyes_1108829_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/girl_kitten_flower_141058_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/piano_silhouette_space_156662_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/silhouette_night_starry_sky_137292_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/warrior_katana_anime_1075388_1920x1080.jpg',
-                'https://images.wallpaperscraft.com/image/single/girl_umbrella_anime_141156_1920x1080.jpg'
-            ];
-            const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
-            document.body.style.setProperty('--bg-image', `url('${randomBg}')`);
+        function showPage(pageId) {
+            lastPage = pageId;
+            const targetPage = document.getElementById(pageId);
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+                p.querySelectorAll('.article-card, .about-card, .friend-card').forEach(card => {
+                    card.style.animation = 'none';
+                    card.offsetHeight;
+                    card.style.animation = null;
+                });
+            });
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            targetPage.classList.add('active');
+            
+            const navLink = document.querySelector(`[data-page="${pageId}"]`);
+            if (navLink) {
+                navLink.classList.add('active');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + pageId);
         }
 
         function showPost(postId) {
@@ -844,7 +863,6 @@
         });
 
         window.addEventListener('load', function() {
-            setRandomBg();
             const hash = window.location.hash.slice(1);
             if (hash && document.getElementById(hash)) {
                 if (hash === 'home' || hash === 'about' || hash === 'friends') {
