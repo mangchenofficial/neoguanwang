@@ -52,6 +52,19 @@ body.dark {
             position: relative;
         }
 
+        /* 保证页面高度随内容自动伸展，无最大高度限制 */
+        html, body {
+            height: auto;
+            min-height: 100vh;
+            overflow: visible;
+        }
+
+        .container, .page, .article-full, .article-content {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
         body::before {
             content: '';
             position: fixed;
