@@ -507,6 +507,38 @@ body.dark {
             margin-bottom: 0;
         }
 
+        .download-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: 1px solid var(--text-link);
+            background-color: var(--text-link);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-button.secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
         .friends-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -584,6 +616,7 @@ body.dark {
             <a class="nav-link active" data-page="home">首页</a>
             <a class="nav-link" data-page="about">关于</a>
             <a class="nav-link" data-page="friends">友链</a>
+            <a class="nav-link" data-page="download">下载</a>
             <button class="theme-toggle" id="themeToggle">深色模式</button>
             <div class="search-area">
                 <input type="text" id="searchInput" class="search-box" placeholder="搜索文章标题、标签或摘要...">
@@ -653,6 +686,20 @@ body.dark {
                         <div class="friend-name">喜悦·悦享生活</div>
                         <div class="friend-desc">生活分享</div>
                     </a>
+                </div>
+            </main>
+        </div>
+
+        <div id="download" class="page">
+            <main style="padding-top: 40px;">
+                <div class="about-card">
+                    <h2 class="about-title">下载中心</h2>
+                    <p class="about-text">你可以在这里一键下载当前博客仓库的完整源码，或直接访问 GitHub 仓库查看更多内容。</p>
+                    <div class="download-actions">
+                        <a class="download-button" href="https://github.com/mangchenofficial/neoguanwang/archive/refs/heads/main.zip" target="_blank" rel="noopener noreferrer">下载仓库 ZIP</a>
+                        <a class="download-button secondary" href="https://github.com/mangchenofficial/neoguanwang" target="_blank" rel="noopener noreferrer">前往 GitHub 仓库</a>
+                    </div>
+                    <p class="about-text" style="margin-top: 20px;">如果你希望离线查看文章内容，下载后直接打开 Markdown 文件即可。该页面使用简单风格，与当前站点设计统一。</p>
                 </div>
             </main>
         </div>
@@ -796,6 +843,9 @@ body.dark {
         }
 
         function parseMarkdownWithMeta(mdText) {
+            if (mdText.charCodeAt(0) === 0xFEFF) {
+                mdText = mdText.substring(1);
+            }
             const lines = mdText.split('\n');
             let metadata = {};
             let contentStart = 0;
@@ -962,7 +1012,7 @@ body.dark {
                 showPage('home');
                 return;
             }
-            if (['home', 'about', 'friends'].includes(hash)) {
+            if (['home', 'about', 'friends', 'download'].includes(hash)) {
                 if (hash === 'home') await renderHome();
                 showPage(hash);
                 return;
@@ -977,7 +1027,7 @@ body.dark {
                 showPage('home');
                 return;
             }
-            if (['home', 'about', 'friends'].includes(hash)) {
+            if (['home', 'about', 'friends', 'download'].includes(hash)) {
                 if (hash === 'home') await renderHome();
                 showPage(hash);
                 return;
