@@ -748,8 +748,9 @@ body.dark {
 
                 for (let file of mdFiles) {
                     try {
-                        // 直接使用 raw.githubusercontent.com 获取原始文本（支持 CORS 且无乱码）
-                        const contentRes = await fetch(file.download_url);
+                            // 使用 ghproxy 镜像并附加时间戳强制回源，避免缓存
+                            const rawUrl = `https://mirror.ghproxy.com/${file.download_url.replace('https://raw.githubusercontent.com/', '')}?t=${Date.now()}`;
+                            const contentRes = await fetch(rawUrl);
                         if (!contentRes.ok) continue;
                         const mdText = await contentRes.text();
 
