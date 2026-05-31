@@ -701,84 +701,7 @@ body.dark {
 
         let lastPage = 'home';
 
-        const articles = [
-            {
-                slug: 'neoui-birth',
-                title: 'NeoUI 的诞生：一个初中生的前端探索',
-                date: '2026年5月31日',
-                category: '创作随想',
-                tags: ['NeoUI', '前端', '开源'],
-                excerpt: '从第一次接触代码到现在，我一直在尝试用前端技术做出好看又实用的东西。NeoUI 是我最近在做的一个 HTML 伪系统项目，模拟手机系统的界面，虽然还在起步阶段，但每一次迭代都让我学到很多。',
-                content: `从第一次接触代码到现在，我一直在尝试用前端技术做出好看又实用的东西。NeoUI 是我最近在做一个 HTML 伪系统，虽然还在起步阶段，但每一次迭代都让我学到很多。
-
-一开始，我只是单纯地喜欢做网页，看到别人做出漂亮的界面就很羡慕。后来慢慢学习 HTML、CSS、JavaScript，开始尝试自己写一些有趣的功能。渐渐地发现，做一个类似操作系统的网页应用好像挺有意思的，于是就有了现在的 NeoUI。
-
-NeoUI 是一个基于 HTML 的伪系统，模拟了手机系统的界面和交互方式。我希望它能够让用户在网页上体验到类似手机系统的感觉，同时也能让新手通过学习它的源码来掌握前端技术。
-
-在开发过程中，我遇到了很多挑战：应用切换、下拉通知栏、锁屏交互、主题切换功能等等。每一个问题的解决都让我对前端有了更深的理解。虽然进度比较慢，但我相信只要坚持做下去，总会越来越好的。
-
-如果你对 NeoUI 感兴趣，欢迎加入我们的 QQ 群 1067851526，一起交流技术，共同成长！`
-            },
-            {
-                slug: 'video-creation',
-                title: '关于我的视频创作与猎奇系列',
-                date: '2026年5月28日',
-                category: '视频创作',
-                tags: ['B站', '视频', '猎奇'],
-                excerpt: '在 B 站做视频是一件很有意思的事情。我的猎奇系列吸引了不少同好，每次打开评论区看到大家的反馈，都觉得坚持更新是值得的。',
-                content: `在 B 站做视频是一件很有意思的事情。我的猎奇系列吸引了不少同好，每次打开评论区看到大家的反馈，都觉得坚持更新是值得的。
-
-一开始做视频的初衷很简单，就是想把一些自己觉得有趣的内容分享给大家。猎奇系列是我最喜欢做的类型，因为可以探索很多平时不为人知的事物，这种发现未知的感觉让我很着迷。
-
-虽然学业比较忙，作为一名初中生，我需要在学习和创作之间找到平衡，但我还是会尽量在周末挤出时间来做视频。我的视频几乎不需要什么后期加工，简单剪辑就可以发布，保持最原始的风格。
-
-感谢每一个支持我的朋友，是你们的鼓励让我有动力继续做下去。如果你想催更或者交流，可以在猎奇系列的 QQ 群 1078247710 找到我。`
-            },
-            {
-                slug: 'blog-setup',
-                title: '搭建这个博客的那些事',
-                date: '2026年5月20日',
-                category: '技术笔记',
-                tags: ['部署', '域名', '博客'],
-                excerpt: '从域名申请到页面部署，每一步都充满了小小的惊喜。Cloudflare 的 DNS 配置、Cloudflare Pages + GitHub 部署，终于让 neocn.qzz.io 上线了。',
-                content: `从域名申请到页面部署，每一步都充满了小小的惊喜。Cloudflare 的 DNS 配置、Cloudflare Pages + GitHub 部署，终于让 neocn.qzz.io 上线了。
-
-其实这个博客的搭建过程并不复杂，但每一个小步骤都让我学到了新东西。首先是域名的选择，neocn 这个名字既代表了我的昵称首字母，也象征着 "New Era of CN"——中国新生代的力量。
-
-在部署方面，我使用了 GitHub 托管源码，Cloudflare Pages 自动部署。绑定域名后，Cloudflare 会自动配置 HTTPS 证书，整个过程非常简单。
-
-配色是我最满意的部分。低饱和度、自然、耐看，每次看到这套配色，都能让心情变得平静。
-
-整个过程让我学到了很多关于域名解析、持续集成部署的前端以外的知识。也让我意识到，搭建一个网站不仅仅是写代码那么简单，还有很多周边的知识需要了解。
-
-希望这个博客能够成为一个记录我成长的地方，也希望它能帮助到想要搭建自己博客的朋友们。`
-            },
-            {
-                slug: 'neo-os',
-                title: '从零构建我的自研操作系统 NEO OS',
-                date: '2026年5月15日',
-                category: '系统开发',
-                tags: ['C语言', '汇编', '操作系统'],
-                excerpt: '用 C 和汇编从零构建了一个 32 位操作系统！支持内存管理、文件系统、图形桌面、窗口系统...一个初中生的操作系统开发之路。',
-                content: `用 C 和汇编从零构建了一个 32 位操作系统！NEO OS 是一个从零构建的 32 位操作系统，运行在 x86 架构上。虽然还有很多不完善的地方，但已经具备了一个现代操作系统的核心要件。
-
-**引导与内核基础：** 引导程序 (boot.asm) 实模式启动，启用 A20 地址线，设置 GDT，切换到 32 位保护模式。内核入口 (kernel.c) 系统初始化总控，GDT/IDT 已建立，CPU 异常和硬件中断均有处理入口。
-
-**内存管理：** 通过 BIOS int 0x15, eax=0xE820 在实模式下获取内存映射。基于位图的 4KB 页框分配器，支持 page_alloc() 和 page_free()。Bump Allocator 实现 kmalloc() 和 kfree()，用于内核动态内存分配。
-
-**显示系统：** VGA 文本模式早期使用，支持 print()、println()、clear_screen()。VGA 图形模式 0x13：320×200×256 色。视频驱动提供 putpixel()、fill_rect()、draw_char()、draw_string()，支持双缓冲。桌面环境包含深色背景 + 顶部任务栏 + 4 个桌面图标。窗口管理支持创建窗口、拖拽移动、关闭按钮、点击置顶。
-
-**输入系统：** PS/2 键盘驱动使用轮询方式读取扫描码并转换为 ASCII。PS/2 鼠标驱动轮询方式读取 3 字节数据包，绘制简单光标。
-
-**文件系统：** 虚拟文件系统 (VFS) 抽象了 open()、read()、close()、readdir() 接口。FAT12 实现支持 1.44MB 软盘镜像格式，可读取根目录、遍历 FAT 表、读取文件内容。Shell 命令 ls、cat 已实现。
-
-**Shell 与命令：** 文本模式 Shell 支持命令历史和执行，可用命令包括 help、clear、echo、about、meminfo、time、ls、cat、run 等。
-
-**当前进度：** 已实现稳定的引导、32 位保护模式、VGA 文本/图形输出、内存管理、文件系统、文本 Shell。图形化 Shell 正在开发中，键盘中断稳定性待修复，高分辨率适配未完成。
-
-作为一个初中生，这个项目让我学到了很多底层知识。虽然还有很长的路要走，但我会继续坚持下去！`
-            }
-        ];
+        // 文章数据由 GitHub posts 文件夹动态获取
 
         function showPage(pageId) {
             lastPage = pageId;
@@ -792,50 +715,135 @@ NeoUI 是一个基于 HTML 的伪系统，模拟了手机系统的界面和交�
             history.replaceState(null, '', '#' + pageId);
         }
 
-        function renderHome() {
-            const container = document.getElementById('articlesContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            articles.forEach(a => {
-                const card = document.createElement('article');
-                card.className = 'article-card';
-                card.innerHTML = `
-                    <div class="article-meta">${a.date} · ${a.category}</div>
-                    <h2 class="article-title">
-                        <a href="#${a.slug}" onclick="openArticle('${a.slug}'); return false;">${a.title}</a>
-                    </h2>
-                    <p class="article-excerpt">${a.excerpt}</p>
-                    <div style="margin-bottom: 16px;">
-                        ${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}
-                    </div>
-                    <a href="#${a.slug}" class="read-more" onclick="openArticle('${a.slug}'); return false;">
-                        阅读全文
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <line x1="5" y1="12" x2="19" y2="12"></line>
-                            <polyline points="12 5 19 12 12 19"></polyline>
-                        </svg>
-                    </a>
-                `;
-                container.appendChild(card);
+        async function fetchPostList() {
+            const GITHUB_USER = 'mangchenofficial'; // 请替换为你的 GitHub 用户名
+            const GITHUB_REPO = 'neoguanwang'; // 请替换为你的仓库名
+            const POSTS_PATH = 'posts';
+            const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${POSTS_PATH}`;
+            try {
+                const res = await fetch(apiUrl);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (!Array.isArray(data)) return [];
+                const mdFiles = data.filter(item => item.name.endsWith('.md'));
+                const posts = [];
+                for (let file of mdFiles) {
+                    const contentRes = await fetch(file.download_url);
+                    if (!contentRes.ok) continue;
+                    const mdText = await contentRes.text();
+                    const { metadata, content } = parseMarkdownWithMeta(mdText);
+                    posts.push({
+                        slug: file.name.replace(/\.md$/, ''),
+                        title: metadata.标题 || file.name.replace(/\.md$/, ''),
+                        date: metadata.日期 || '未知日期',
+                        category: metadata.分类 || '随笔',
+                        tags: metadata.标签 ? metadata.标签.split(',').map(t => t.trim()) : [],
+                        excerpt: content.slice(0, 150).replace(/\n/g, ' ') + (content.length > 150 ? '...' : ''),
+                        rawContent: content,
+                    });
+                }
+                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+                return posts;
+            } catch (err) {
+                console.error('获取文章列表失败', err);
+                return [];
+            }
+        }
+
+        function parseMarkdownWithMeta(mdText) {
+            const lines = mdText.split('\n');
+            let metadata = {};
+            let contentStart = 0;
+            for (let i = 0; i < Math.min(lines.length, 30); i++) {
+                const line = lines[i];
+                if (line.trim() === '') {
+                    contentStart = i + 1;
+                    break;
+                }
+                const colonIndex = line.indexOf(':');
+                if (colonIndex > 0) {
+                    const key = line.slice(0, colonIndex).trim();
+                    const value = line.slice(colonIndex + 1).trim();
+                    metadata[key] = value;
+                } else {
+                    contentStart = i;
+                    break;
+                }
+            }
+            const content = lines.slice(contentStart).join('\n').trim();
+            return { metadata, content };
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
         }
 
-        function openArticle(slug) {
-            const a = articles.find(x => x.slug === slug);
-            if (!a) return;
+        async function renderHome() {
+            const container = document.getElementById('articlesContainer');
+            if (!container) return;
+            container.innerHTML = '<div style="text-align:center; padding:40px;">加载中...</div>';
+            const posts = await fetchPostList();
+            if (posts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:40px;">暂无文章，请在 GitHub 仓库的 posts 文件夹添加 .md 文件。</p>';
+                return;
+            }
+            let html = '';
+            for (let post of posts) {
+                html += `
+                    <article class="article-card">
+                        <div class="article-meta">${escapeHtml(post.date)} · ${escapeHtml(post.category)}</div>
+                        <h2 class="article-title">
+                            <a href="#${post.slug}" onclick="openArticle('${post.slug}'); return false;">${escapeHtml(post.title)}</a>
+                        </h2>
+                        <p class="article-excerpt">${escapeHtml(post.excerpt)}</p>
+                        <div style="margin-bottom: 16px;">
+                            ${post.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+                        </div>
+                        <a href="#${post.slug}" class="read-more" onclick="openArticle('${post.slug}'); return false;">
+                            阅读全文
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </article>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        async function openArticle(slug) {
+            const posts = await fetchPostList();
+            const post = posts.find(p => p.slug === slug);
+            if (!post) {
+                await renderHome();
+                showPage('home');
+                return;
+            }
             const el = document.getElementById('single-article-content');
             if (!el) return;
-            el.innerHTML = `\n                <div class="article-meta">${a.date} · ${a.category}</div>\n                <h1 class="article-title">${a.title}</h1>\n                <div style="margin-bottom: 24px;">${a.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>\n                <div class="article-content">${marked.parse(a.content)}</div>\n            `;
+            const contentHtml = marked.parse(post.rawContent);
+            el.innerHTML = `
+                <div class="article-meta">${escapeHtml(post.date)} · ${escapeHtml(post.category)}</div>
+                <h1 class="article-title">${escapeHtml(post.title)}</h1>
+                <div style="margin-bottom: 24px;">${post.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+                <div class="article-content">${contentHtml}</div>
+            `;
             loadGiscus(slug);
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
             document.getElementById('single').classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
             history.replaceState(null, '', '#' + slug);
         }
 
-        function goBackToHome() {
-            renderHome();
+        async function goBackToHome() {
+            await renderHome();
             showPage('home');
         }
 
@@ -892,57 +900,44 @@ NeoUI 是一个基于 HTML 的伪系统，模拟了手机系统的界面和交�
         }
 
         document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', async function(e) {
                 e.preventDefault();
                 const page = this.dataset.page;
                 if (page === 'home') {
-                    renderHome();
+                    await renderHome();
                 }
                 showPage(page);
             });
         });
 
-        window.addEventListener('hashchange', function() {
+        window.addEventListener('hashchange', async function() {
             const hash = window.location.hash.slice(1);
             if (!hash) {
-                renderHome();
+                await renderHome();
                 showPage('home');
                 return;
             }
             if (['home', 'about', 'friends'].includes(hash)) {
-                if (hash === 'home') renderHome();
+                if (hash === 'home') await renderHome();
                 showPage(hash);
                 return;
             }
-            // otherwise try open article by slug
-            const found = articles.find(a => a.slug === hash);
-            if (found) {
-                openArticle(hash);
-            } else {
-                renderHome();
-                showPage('home');
-            }
+            await openArticle(hash);
         });
 
-        window.addEventListener('load', function() {
+        window.addEventListener('load', async function() {
             const hash = window.location.hash.slice(1);
             if (!hash) {
-                renderHome();
+                await renderHome();
                 showPage('home');
                 return;
             }
             if (['home', 'about', 'friends'].includes(hash)) {
-                if (hash === 'home') renderHome();
+                if (hash === 'home') await renderHome();
                 showPage(hash);
                 return;
             }
-            const found = articles.find(a => a.slug === hash);
-            if (found) {
-                openArticle(hash);
-            } else {
-                renderHome();
-                showPage('home');
-            }
+            await openArticle(hash);
         });
 
         // 绑定搜索输入
