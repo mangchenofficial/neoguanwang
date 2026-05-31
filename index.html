@@ -11,6 +11,7 @@
         :root {
             --bg-color: #F9F7F5;
             --card-bg: #FFFFFF;
+            --nav-bg: rgba(249, 247, 245, 0.92);
             --text-primary: #3A4A3F;
             --text-link: #8DB5A7;
             --text-link-hover: #5B8C7A;
@@ -25,11 +26,12 @@
 body.dark {
     --bg-color: #1E2622;
     --card-bg: #2C3832;
+    --nav-bg: rgba(30, 38, 34, 0.92);
     --text-primary: #E6EDE8;
-    --border-light: #3E4D45;
-    --accent-soft: #3A5A4F;
     --text-link: #9DC5B7;
     --text-link-hover: #C2E0D4;
+    --border-light: #3E4D45;
+    --accent-soft: #3A5A4F;
     --quote-bg: #25332D;
 }
 
@@ -105,7 +107,7 @@ body.dark {
         }
 
         .article-card {
-            background-color: rgba(255, 255, 255, 0.75);
+            background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-light);
             border-radius: 16px;
@@ -128,7 +130,7 @@ body.dark {
         }
 
         .about-card {
-            background-color: rgba(255, 255, 255, 0.75);
+            background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-light);
             border-radius: 16px;
@@ -150,7 +152,7 @@ body.dark {
         }
 
         .friend-card {
-            background-color: rgba(255, 255, 255, 0.75);
+            background-color: var(--card-bg);
             backdrop-filter: blur(10px);
             border: 1px solid var(--border-light);
             border-radius: 12px;
@@ -170,19 +172,29 @@ body.dark {
         }
 
         nav {
-            padding: 24px 0;
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 18px;
+            height: 130px;
+            border-radius: 12px;
+            width: min(100%, 960px);
+            margin: 0 auto;
             border-bottom: 1px solid var(--border-light);
             position: sticky;
             top: 0;
-            background-color: rgba(249, 247, 245, 0.92);
+            background-color: var(--nav-bg);
             backdrop-filter: blur(12px);
             z-index: 100;
             animation: slideUp 0.5s ease forwards;
         }
 
         nav a {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             margin: 0 12px;
             color: var(--text-primary);
             text-decoration: none;
@@ -197,6 +209,74 @@ body.dark {
             font-family: inherit;
             position: relative;
             overflow: hidden;
+            height: 44px;
+            line-height: normal;
+        }
+
+        /* 让深色模式按钮和导航链接样式一致 */
+        nav .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 20px;
+            height: 44px;
+            line-height: normal;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 228, 222, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        nav .theme-toggle:hover::before {
+            left: 100%;
+        }
+
+        nav .theme-toggle:hover,
+        nav .theme-toggle.active {
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            transform: scale(1.05);
+        }
+
+        /* 搜索框样式：与导航按钮圆角与高度保持一致 */
+        .search-box {
+            width: 100%;
+            box-sizing: border-box;
+            height: 44px;
+            padding: 0 20px;
+            border-radius: 9999px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* 搜索区域间距，靠近导航，衔接更自然 */
+        .search-area {
+            flex: 1 1 300px;
+            min-width: 220px;
+            margin: 0;
         }
 
         nav a::before {
@@ -504,13 +584,13 @@ body.dark {
             <a class="nav-link active" data-page="home">首页</a>
             <a class="nav-link" data-page="about">关于</a>
             <a class="nav-link" data-page="friends">友链</a>
-            <button class="theme-toggle" id="themeToggle" style="background: var(--card-bg); border: 1px solid var(--border-light); border-radius: 40px; padding: 6px 14px; margin-left: 12px; cursor: pointer; font-family: inherit;">深色模式</button>
+            <button class="theme-toggle" id="themeToggle">深色模式</button>
+            <div class="search-area">
+                <input type="text" id="searchInput" class="search-box" placeholder="搜索文章标题、标签或摘要...">
+            </div>
         </nav>
 
         <div id="home" class="page active">
-        <div class="search-area" style="margin-bottom: 32px;">
-    <input type="text" id="searchInput" class="search-box" placeholder="搜索文章标题、标签或摘要..." style="width: 100%; padding: 14px 20px; border-radius: 60px; background: var(--card-bg); border: 1px solid var(--border-light); color: var(--text-primary);">
-</div>
             <main style="padding-top: 40px;">
                 <div id="articlesContainer"></div>
             </main>
