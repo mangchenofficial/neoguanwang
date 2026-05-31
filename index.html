@@ -716,36 +716,87 @@ body.dark {
         }
 
         async function fetchPostList() {
-            const GITHUB_USER = 'mangchenofficial'; // 请替换为你的 GitHub 用户名
-            const GITHUB_REPO = 'neoguanwang'; // 请替换为你的仓库名
+            // 配置你的 GitHub 信息
+            const GITHUB_USER = 'mangchenofficial';
+            const GITHUB_REPO = 'neoguanwang';
             const POSTS_PATH = 'posts';
             const apiUrl = `https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${POSTS_PATH}`;
+
+            // 显示加载中的提示
+            const container = document.getElementById('articlesContainer');
+            if (container) {
+                container.innerHTML = '<div style="text-align:center; padding:40px;">正在加载文章...</div>';
+            }
+
             try {
+                // 1. 获取文章列表
                 const res = await fetch(apiUrl);
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                if (!res.ok) {
+                    if (res.status === 403) {
+                        throw new Error('GitHub API 访问限制，请稍后再试。');
+                    } else if (res.status === 404) {
+                        throw new Error('找不到 posts 文件夹，请确认仓库中存在该目录。');
+                    } else {
+                        throw new Error(`HTTP ${res.status}`);
+                    }
+                }
+
                 const data = await res.json();
                 if (!Array.isArray(data)) return [];
+
+                // 2. 筛选出所有 .md 文件
                 const mdFiles = data.filter(item => item.name.endsWith('.md'));
+
+                // 3. 逐一获取并解析文章内容
                 const posts = [];
                 for (let file of mdFiles) {
-                    const contentRes = await fetch(file.download_url);
-                    if (!contentRes.ok) continue;
-                    const mdText = await contentRes.text();
-                    const { metadata, content } = parseMarkdownWithMeta(mdText);
-                    posts.push({
-                        slug: file.name.replace(/\.md$/, ''),
-                        title: metadata.标题 || file.name.replace(/\.md$/, ''),
-                        date: metadata.日期 || '未知日期',
-                        category: metadata.分类 || '随笔',
-                        tags: metadata.标签 ? metadata.标签.split(',').map(t => t.trim()) : [],
-                        excerpt: content.slice(0, 150).replace(/\n/g, ' ') + (content.length > 150 ? '...' : ''),
-                        rawContent: content,
-                    });
+                    try {
+                        const contentRes = await fetch(file.download_url);
+                        if (!contentRes.ok) continue;
+                        const mdText = await contentRes.text();
+
+                        // 解析文章元数据（标题、日期等）
+                        const { metadata, content } = parseMarkdownWithMeta(mdText);
+                        // 使用文件名（不含 .md）作为文章的唯一标识 (slug)
+                        const slug = file.name.replace(/\.md$/, '');
+
+                        posts.push({
+                            slug: slug,
+                            title: metadata.标题 || slug,
+                            date: metadata.日期 || '未知日期',
+                            category: metadata.分类 || '随笔',
+                            tags: metadata.标签 ? metadata.标签.split(',').map(t => t.trim()) : [],
+                            excerpt: content.slice(0, 150).replace(/\n/g, ' ') + (content.length > 150 ? '...' : ''),
+                            rawContent: content,
+                        });
+                    } catch (fileError) {
+                        console.error(`解析文件 ${file.name} 时出错:`, fileError);
+                        continue;
+                    }
                 }
-                posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // 添加排序用的日期字段
+                function parseChineseDate(dateStr) {
+                    const match = dateStr.match(/(\d+)年(\d+)月(\d+)日/);
+                    if (match) {
+                        const year = match[1];
+                        const month = match[2].padStart(2, '0');
+                        const day = match[3].padStart(2, '0');
+                        return `${year}-${month}-${day}`;
+                    }
+                    return '1970-01-01';
+                }
+                posts.forEach(post => {
+                    post.sortDate = parseChineseDate(post.date);
+                });
+                posts.sort((a, b) => b.sortDate.localeCompare(a.sortDate));
                 return posts;
+
             } catch (err) {
-                console.error('获取文章列表失败', err);
+                console.error('获取文章列表失败:', err);
+                if (container) {
+                    container.innerHTML = `<p style="text-align:center; padding:40px;">加载失败: ${err.message}<br>请检查网络或稍后重试。</p>`;
+                }
                 return [];
             }
         }
