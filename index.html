@@ -755,15 +755,10 @@ body.dark {
                 const posts = [];
                 for (let file of mdFiles) {
                     try {
-                        const contentRes = await fetch(file.url);
+                        const rawUrl = `/raw/${GITHUB_USER}/${GITHUB_REPO}/main/${file.path}`;
+                        const contentRes = await fetch(rawUrl);
                         if (!contentRes.ok) continue;
-                        const contentJson = await contentRes.json();
-                        const binaryStr = atob(contentJson.content.replace(/\n/g, ''));
-                        const bytes = new Uint8Array(binaryStr.length);
-                        for (let i = 0; i < binaryStr.length; i++) {
-                            bytes[i] = binaryStr.charCodeAt(i);
-                        }
-                        const mdText = new TextDecoder('utf-8').decode(bytes);
+                        const mdText = await contentRes.text();
 
                         // 解析文章元数据（标题、日期等）
                         const { metadata, content } = parseMarkdownWithMeta(mdText);
