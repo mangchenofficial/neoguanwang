@@ -649,6 +649,10 @@ body.dark {
                         <div class="friend-name">喜灰之最</div>
                         <div class="friend-desc">B站UP主</div>
                     </a>
+                    <a href="https://space.bilibili.com/3546937275976343?spm_id_from=333.337.0.0" target="_blank" class="friend-card">
+                        <div class="friend-name">喜悦·悦享生活</div>
+                        <div class="friend-desc">生活分享</div>
+                    </a>
                 </div>
             </main>
         </div>
@@ -751,7 +755,8 @@ body.dark {
                 const posts = [];
                 for (let file of mdFiles) {
                     try {
-                        const contentRes = await fetch(file.download_url);
+                        const rawUrl = `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@main/${file.path}`;
+                        const contentRes = await fetch(rawUrl);
                         if (!contentRes.ok) continue;
                         const mdText = await contentRes.text();
 
