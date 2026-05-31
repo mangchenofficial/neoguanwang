@@ -23,22 +23,33 @@
             --max-width: 800px;
         }
         /* 深色模式变量 */
-        body.dark {
-            --bg-color: #1E2622;
-            --card-bg: #2C3832;
-            --nav-bg: rgba(30, 38, 34, 0.92);
-            --text-primary: #E6EDE8;
-            --text-link: #9DC5B7;
-            --text-link-hover: #C2E0D4;
-            --border-light: #3E4D45;
-            --accent-soft: #3A5A4F;
-            --quote-bg: #25332D;
-        }
+body.dark {
+    --bg-color: #1E2622;
+    --card-bg: #2C3832;
+    --nav-bg: rgba(30, 38, 34, 0.92);
+    --text-primary: #E6EDE8;
+    --text-link: #9DC5B7;
+    --text-link-hover: #C2E0D4;
+    --border-light: #3E4D45;
+    --accent-soft: #3A5A4F;
+    --quote-bg: #25332D;
+}
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            position: relative;
         }
 
         body::before {
@@ -737,38 +748,10 @@
 
                 for (let file of mdFiles) {
                     try {
-                        // 优先使用自建 Worker 代理，其次降级到 kgithub 和 jsDelivr
-                        const workerProxy = 'https://neoguanwang.3132329918.workers.dev';
-                        let mdText = null;
-                        let lastError = null;
-                        const urls = [
-                            `${workerProxy}/${file.download_url}`,
-                            `https://kgithub.com/${GITHUB_USER}/${GITHUB_REPO}/main/${file.path}`,
-                            `https://cdn.jsdelivr.net/gh/${GITHUB_USER}/${GITHUB_REPO}@main/${file.path}`
-                        ];
-
-                        for (const url of urls) {
-                            try {
-                                const controller = new AbortController();
-                                const timeoutId = setTimeout(() => controller.abort(), 8000);
-                                const res = await fetch(url, { signal: controller.signal, cache: 'no-store' });
-                                clearTimeout(timeoutId);
-                                if (res.ok) {
-                                    mdText = await res.text();
-                                    break;
-                                } else {
-                                    lastError = `HTTP ${res.status}`;
-                                }
-                            } catch (err) {
-                                lastError = err.message;
-                                continue;
-                            }
-                        }
-
-                        if (!mdText) {
-                            console.error(`所有镜像源均失败：${file.name} (${lastError})`);
-                            continue;
-                        }
+                        // 直接使用 raw.githubusercontent.com 获取原始文本（支持 CORS 且无乱码）
+                        const contentRes = await fetch(file.download_url);
+                        if (!contentRes.ok) continue;
+                        const mdText = await contentRes.text();
 
                         const { metadata, content } = parseMarkdownWithMeta(mdText);
                         const slug = file.name.replace(/\.md$/, '');
