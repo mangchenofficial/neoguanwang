@@ -1,0 +1,1062 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>芒辰のブログ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #F9F7F5;
+            --card-bg: #FFFFFF;
+            --nav-bg: rgba(249, 247, 245, 0.92);
+            --text-primary: #3A4A3F;
+            --text-link: #8DB5A7;
+            --text-link-hover: #5B8C7A;
+            --border-light: #E2E6E9;
+            --accent-soft: #C9E4DE;
+            --code-bg: #2D3A32;
+            --code-text: #E2E6E9;
+            --quote-bg: #F4F8F5;
+            --max-width: 800px;
+        }
+        /* 深色模式变量 */
+body.dark {
+    --bg-color: #1E2622;
+    --card-bg: #2C3832;
+    --nav-bg: rgba(30, 38, 34, 0.92);
+    --text-primary: #E6EDE8;
+    --text-link: #9DC5B7;
+    --text-link-hover: #C2E0D4;
+    --border-light: #3E4D45;
+    --accent-soft: #3A5A4F;
+    --quote-bg: #25332D;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            line-height: 1.8;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* 保证页面高度随内容自动伸展，无最大高度限制 */
+        html, body {
+            height: auto;
+            min-height: 100vh;
+            overflow: visible;
+        }
+
+        .container, .page, .article-full, .article-content {
+            height: auto !important;
+            max-height: none !important;
+            overflow: visible !important;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+        }
+
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .article-card:nth-child(1) { animation-delay: 0.1s; }
+        .article-card:nth-child(2) { animation-delay: 0.2s; }
+        .article-card:nth-child(3) { animation-delay: 0.3s; }
+        .article-card:nth-child(4) { animation-delay: 0.4s; }
+
+        .article-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--text-link);
+        }
+
+        .about-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.6s ease forwards;
+            opacity: 0;
+        }
+
+        .about-card:nth-child(1) { animation-delay: 0.1s; }
+        .about-card:nth-child(2) { animation-delay: 0.2s; }
+        .about-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .about-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-5px);
+            border-color: var(--text-link);
+        }
+
+        .friend-card {
+            background-color: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.5s ease forwards;
+            opacity: 0;
+        }
+
+        .friend-card:nth-child(1) { animation-delay: 0.1s; }
+
+        .friend-card:hover {
+            box-shadow: 0 20px 60px rgba(58, 74, 63, 0.15);
+            transform: translateY(-5px) scale(1.05);
+            border-color: var(--text-link);
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 12px 18px;
+            height: 130px;
+            border-radius: 12px;
+            width: min(100%, 960px);
+            margin: 0 auto;
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            background-color: var(--nav-bg);
+            backdrop-filter: blur(12px);
+            z-index: 100;
+            animation: slideUp 0.5s ease forwards;
+        }
+
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 20px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+            height: 44px;
+            line-height: normal;
+        }
+
+        /* 让深色模式按钮和导航链接样式一致 */
+        nav .theme-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 12px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 8px 18px;
+            border-radius: 20px;
+            height: 44px;
+            line-height: normal;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 228, 222, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        nav .theme-toggle:hover::before {
+            left: 100%;
+        }
+
+        nav .theme-toggle:hover,
+        nav .theme-toggle.active {
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            transform: scale(1.05);
+        }
+
+        /* 搜索框样式：与导航按钮圆角与高度保持一致 */
+        .search-box {
+            width: 100%;
+            box-sizing: border-box;
+            height: 44px;
+            padding: 0 20px;
+            border-radius: 9999px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-light);
+            color: var(--text-primary);
+            font-size: 1rem;
+            line-height: 1;
+        }
+
+        /* 搜索区域间距，靠近导航，衔接更自然 */
+        .search-area {
+            flex: 1 1 300px;
+            min-width: 220px;
+            margin: 0;
+        }
+
+        nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(201, 228, 222, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        nav a:hover::before {
+            left: 100%;
+        }
+
+        nav a:hover, nav a.active {
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            transform: scale(1.05);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-link);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .back-link:hover {
+            color: var(--text-link-hover);
+            background-color: var(--accent-soft);
+            transform: translateX(-5px);
+        }
+
+        .back-link svg {
+            margin-right: 6px;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .back-link:hover svg {
+            transform: translateX(-3px);
+        }
+
+        .article-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+            transition: all 0.3s ease;
+        }
+
+        .article-card:hover {
+            box-shadow: 0 8px 32px rgba(58, 74, 63, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .article-full {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+        }
+
+        .article-meta {
+            font-size: 0.85rem;
+            color: var(--text-link);
+            margin-bottom: 16px;
+            font-weight: 400;
+        }
+
+        .article-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            line-height: 1.4;
+        }
+
+        .article-title a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .article-title a:hover {
+            color: var(--text-link-hover);
+        }
+
+        .article-excerpt {
+            font-size: 1rem;
+            color: var(--text-primary);
+            opacity: 0.85;
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .article-content {
+            font-size: 1rem;
+            color: var(--text-primary);
+            line-height: 1.9;
+            margin-bottom: 20px;
+        }
+
+        .article-content p {
+            margin-bottom: 16px;
+        }
+
+        .read-more {
+            display: inline-flex;
+            align-items: center;
+            color: var(--text-link);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background-color: transparent;
+        }
+
+        .read-more:hover {
+            color: var(--text-link-hover);
+            background-color: var(--accent-soft);
+            transform: translateX(5px);
+        }
+
+        .read-more svg {
+            margin-left: 6px;
+            width: 16px;
+            height: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .read-more:hover svg {
+            transform: translateX(5px);
+        }
+
+        .tag {
+            display: inline-block;
+            background-color: var(--accent-soft);
+            color: var(--text-link-hover);
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 12px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tag:hover {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(141, 181, 167, 0.4);
+        }
+
+        footer {
+            text-align: center;
+            padding: 48px 0 60px;
+            border-top: 1px solid var(--border-light);
+            margin-top: 48px;
+            font-size: 0.85rem;
+            color: var(--text-link);
+        }
+
+        footer a {
+            color: var(--text-link-hover);
+            text-decoration: none;
+        }
+
+        .social-links {
+            margin-bottom: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            color: var(--text-link);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .social-links a:hover {
+            color: var(--text-link-hover);
+            transform: translateY(-5px) scale(1.1);
+        }
+
+        .social-links svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .about-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 32px;
+        }
+
+        .about-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+        }
+
+        .about-text {
+            margin-bottom: 16px;
+            opacity: 0.9;
+        }
+
+        .about-text:last-child {
+            margin-bottom: 0;
+        }
+
+        .download-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .download-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 999px;
+            border: 1px solid var(--text-link);
+            background-color: var(--text-link);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .download-button.secondary {
+            background-color: transparent;
+            color: var(--text-primary);
+            border-color: var(--border-light);
+        }
+
+        .download-button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+
+        .friends-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+
+        .friend-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .friend-card:hover {
+            box-shadow: 0 8px 32px rgba(58, 74, 63, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .friend-name {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1rem;
+        }
+
+        .friend-desc {
+            font-size: 0.85rem;
+            color: var(--text-link);
+        }
+
+        .section-title {
+            font-family: 'Noto Serif SC', Georgia, serif;
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            padding-top: 32px;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 16px;
+        }
+
+        @media (max-width: 600px) {
+            .article-card, .article-full {
+                padding: 28px;
+            }
+
+            .article-title {
+                font-size: 1.3rem;
+            }
+
+            nav a {
+                margin: 0 6px;
+                padding: 6px 12px;
+                font-size: 0.85rem;
+            }
+
+            .about-card {
+                padding: 28px;
+            }
+
+            .about-title {
+                font-size: 1.4rem;
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav>
+            <a class="nav-link active" data-page="home">首页</a>
+            <a class="nav-link" data-page="about">关于</a>
+            <a class="nav-link" data-page="friends">友链</a>
+            <a class="nav-link" data-page="download">下载</a>
+            <button class="theme-toggle" id="themeToggle">深色模式</button>
+            <div class="search-area">
+                <input type="text" id="searchInput" class="search-box" placeholder="搜索文章标题、标签或摘要...">
+            </div>
+        </nav>
+
+        <div id="home" class="page active">
+            <main style="padding-top: 40px;">
+                <div id="articlesContainer"></div>
+            </main>
+        </div>
+
+        
+
+        <div id="about" class="page">
+            <main style="padding-top: 40px;">
+                <div class="about-card">
+                    <h2 class="about-title">关于我</h2>
+                    <p class="about-text">
+                        大家好，我是芒辰，是一名初中生创作者。从小就對技术和创意充满兴趣，现在主要活跃在 B 站，喜欢做各种有趣的视频内容。
+                    </p>
+                    <p class="about-text">
+                        我目前有两个主要的创作方向：一是 <strong>NeoUI</strong>，这是一个我在开发的 HTML 伪系统，模拟手机系统的界面；二是 <strong>猎奇系列</strong> 视频，这是我在 B 站的个人创作，分享一些有趣或冷门的内容。
+                    </p>
+                    <p class="about-text">
+                        作为一名初中生，我需要在学业和创作之间找到平衡。上学期间我会尽量保持每周一更的节奏，假期可能会有更多时间投入创作。如果你喜欢我的内容，欢迎在 B 站关注我！
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h2 class="about-title">我的项目</h2>
+                    <p class="about-text">
+                        <strong>NEO OS</strong> - 用 C 和汇编从零构建的 32 位操作系统，运行在 x86 架构上。支持内存管理、文件系统、图形桌面、窗口系统、VGA 图形模式、PS/2 键盘鼠标输入、FAT12 文件系统、Shell 命令等功能。目前在 QEMU 上稳定运行。
+                    </p>
+                    <p class="about-text">
+                        <strong>NeoUI</strong> - 一个正在开发中的 HTML 伪系统，模拟手机系统的界面和交互方式。包含应用管理、下拉通知栏、锁屏界面、主题切换等功能，可以在网页上体验手机系统的感觉。目前还在早期开发阶段，欢迎有兴趣的朋友加入一起完善。
+                    </p>
+                </div>
+
+                <div class="about-card">
+                    <h2 class="about-title">联系方式</h2>
+                    <p class="about-text">
+                        如果你有任何问题或者想交流技术，欢迎通过以下方式联系我：
+                    </p>
+                    <p class="about-text">
+                        • NeoUI QQ群：<strong>1067851526</strong><br>
+                        • 猎奇系列催更 QQ群：<strong>1078247710</strong><br>
+                        • B站：<a href="https://space.bilibili.com/2009275394" target="_blank" style="color: var(--text-link-hover);">芒辰Official</a>
+                    </p>
+                </div>
+            </main>
+        </div>
+
+        <div id="friends" class="page">
+            <main style="padding-top: 40px;">
+                <h2 class="section-title">友情链接</h2>
+                <div class="friends-grid">
+                    <a href="https://space.bilibili.com/2009275394" target="_blank" class="friend-card">
+                        <div class="friend-name">芒辰Official</div>
+                        <div class="friend-desc">B站主页</div>
+                    </a>
+                    <a href="https://b23.tv/JY4u7IL" target="_blank" class="friend-card">
+                        <div class="friend-name">喜灰之最</div>
+                        <div class="friend-desc">B站UP主</div>
+                    </a>
+                    <a href="https://space.bilibili.com/3546937275976343?spm_id_from=333.337.0.0" target="_blank" class="friend-card">
+                        <div class="friend-name">喜悦·悦享生活</div>
+                        <div class="friend-desc">生活分享</div>
+                    </a>
+                </div>
+            </main>
+        </div>
+
+        <div id="download" class="page">
+            <main style="padding-top: 40px;">
+                <div class="about-card">
+                    <h2 class="about-title">下载中心</h2>
+                    <p class="about-text">你可以在这里一键下载当前博客仓库的完整源码，或直接访问 GitHub 仓库查看更多内容。</p>
+                    <div class="download-actions">
+                        <a class="download-button" href="https://1816559621.share.123865.com/123pan/SQA6Vv-VdocH" target="_blank" rel="noopener noreferrer">打开下载链接</a>
+                    </div>
+                    <p class="about-text" style="margin-top: 20px;">如果你希望离线查看文章内容，下载后直接打开 Markdown 文件即可。该页面使用简单风格，与当前站点设计统一。</p>
+                </div>
+            </main>
+        </div>
+
+        <div id="single" class="page">
+            <main style="padding-top: 40px;">
+                <a class="back-link" onclick="goBackToHome()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"></line>
+                        <polyline points="12 19 5 12 12 5"></polyline>
+                    </svg>
+                    返回
+                </a>
+                <article class="article-full" id="single-article-content"></article>
+                <div id="giscus-comments" style="margin-top: 48px;"></div>
+            </main>
+        </div>
+
+        <footer>
+            <div class="social-links">
+                <a href="https://space.bilibili.com/2009275394" target="_blank" rel="noopener noreferrer" title="Bilibili">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.659.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/>
+                    </svg>
+                </a>
+                <a href="https://qm.qq.com/q/VDzk5C0dwe" target="_blank" rel="noopener noreferrer" title="QQ">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.003 2c-2.265 0-6.29 1.364-6.29 7.325v1.195S3.55 14.96 3.55 17.474c0 .665.17 1.025.281 1.025.114 0 .902-.484 1.748-2.072 0 0-.18 2.197 1.904 3.967 0 0-1.77.495-1.77 1.182 0 .686 4.078.43 6.29.43 2.21 0 6.287.257 6.287-.43 0-.687-1.768-1.182-1.768-1.182 2.085-1.77 1.905-3.967 1.905-3.967.845 1.588 1.634 2.072 1.746 2.072.111 0 .283-.36.283-1.025 0-2.514-2.166-6.954-2.166-6.954V9.325C18.29 3.364 14.268 2 12.003 2z"/>
+                    </svg>
+                </a>
+            </div>
+            <p> 芒辰 · 初中生创作者的个人空间</p>
+            <p style="margin-top: 8px;">NeoUI QQ群: 1067851526 · 猎奇催更群: 1078247710</p>
+        </footer>
+    </div>
+
+    <script>
+        const bgImages = [
+            'https://images.wallpaperscraft.com/image/sakura_art_sky_122545_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_hood_ears_1013418_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_glow_eyes_1108829_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_kitten_flower_141058_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/piano_silhouette_space_156662_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/silhouette_night_starry_sky_137292_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/warrior_katana_anime_1075388_1920x1080.jpg',
+            'https://images.wallpaperscraft.com/image/girl_umbrella_anime_141156_1920x1080.jpg'
+        ];
+        const randomBg = bgImages[Math.floor(Math.random() * bgImages.length)];
+        document.body.style.backgroundImage = `url('${randomBg}')`;
+
+        let lastPage = 'home';
+
+        // 文章数据由 GitHub posts 文件夹动态获取
+
+        function showPage(pageId) {
+            lastPage = pageId;
+            const targetPage = document.getElementById(pageId);
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            if (targetPage) targetPage.classList.add('active');
+            const navLink = document.querySelector(`[data-page="${pageId}"]`);
+            if (navLink) navLink.classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + pageId);
+        }
+
+        const LOCAL_POST_FILES = [
+            'MXOS 1.2.0：一个运行在浏览器中的桌面伪操作系统.md',
+            'NeoUI 的诞生：一个初中生的前端探索.md',
+            '从零构建我的自研操作系统 NEO OS.md',
+            '关于我的视频创作与猎奇系列.md',
+            '平板澎湃3全系统底层应用.md'
+        ];
+
+        let cachedPosts = null;
+
+        function parseChineseDate(dateStr) {
+            const match = dateStr.match(/(\d+)年(\d+)月(\d+)日/);
+            if (match) {
+                const year = match[1];
+                const month = match[2].padStart(2, '0');
+                const day = match[3].padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+            return '1970-01-01';
+        }
+
+        async function fetchPostList(forceReload) {
+            if (cachedPosts && !forceReload) return cachedPosts;
+
+            const container = document.getElementById('articlesContainer');
+            if (container && !forceReload) {
+                container.innerHTML = '<div style="text-align:center; padding:40px;">正在加载文章...</div>';
+            }
+
+            try {
+                const posts = [];
+
+                for (let fileName of LOCAL_POST_FILES) {
+                    try {
+                        const filePath = 'posts/' + encodeURIComponent(fileName);
+                        const contentRes = await fetch(filePath);
+                        if (!contentRes.ok) continue;
+                        const mdText = await contentRes.text();
+
+                        const { metadata, content } = parseMarkdownWithMeta(mdText);
+                        const slug = fileName.replace(/\.md$/, '');
+
+                        posts.push({
+                            slug: slug,
+                            title: metadata.标题 || slug,
+                            date: metadata.日期 || '未知日期',
+                            category: metadata.分类 || '随笔',
+                            tags: metadata.标签 ? metadata.标签.split(',').map(t => t.trim()) : [],
+                            excerpt: content.slice(0, 150).replace(/\n/g, ' ') + (content.length > 150 ? '...' : ''),
+                            rawContent: content,
+                        });
+                    } catch (fileError) {
+                        console.error(`解析文件 ${fileName} 时出错:`, fileError);
+                        continue;
+                    }
+                }
+
+                posts.forEach(post => {
+                    post.sortDate = parseChineseDate(post.date);
+                });
+                posts.sort((a, b) => b.sortDate.localeCompare(a.sortDate));
+                cachedPosts = posts;
+                return posts;
+            } catch (err) {
+                console.error('获取文章列表失败:', err);
+                if (container) {
+                    container.innerHTML = `<p style="text-align:center; padding:40px;">加载失败: ${err.message}<br>请确保当前站点在本地 web server 上运行（如 Python: python -m http.server）。</p>`;
+                }
+                return [];
+            }
+        }
+
+        function parseMarkdownWithMeta(mdText) {
+            if (mdText.charCodeAt(0) === 0xFEFF) {
+                mdText = mdText.substring(1);
+            }
+            const lines = mdText.split('\n');
+            let metadata = {};
+            let contentStart = 0;
+            for (let i = 0; i < Math.min(lines.length, 30); i++) {
+                const line = lines[i];
+                if (line.trim() === '') {
+                    contentStart = i + 1;
+                    break;
+                }
+                const colonIndex = line.indexOf(':');
+                if (colonIndex > 0) {
+                    const key = line.slice(0, colonIndex).trim();
+                    const value = line.slice(colonIndex + 1).trim();
+                    metadata[key] = value;
+                } else {
+                    contentStart = i;
+                    break;
+                }
+            }
+            const content = lines.slice(contentStart).join('\n').trim();
+            return { metadata, content };
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        async function renderHome() {
+            const container = document.getElementById('articlesContainer');
+            if (!container) return;
+            container.innerHTML = '<div style="text-align:center; padding:40px;">加载中...</div>';
+            const posts = await fetchPostList();
+            if (posts.length === 0) {
+                container.innerHTML = '<p style="text-align:center; padding:40px;">暂无文章，请在 GitHub 仓库的 posts 文件夹添加 .md 文件。</p>';
+                return;
+            }
+            let html = '';
+            for (let post of posts) {
+                html += `
+                    <article class="article-card">
+                        <div class="article-meta">${escapeHtml(post.date)} · ${escapeHtml(post.category)}</div>
+                        <h2 class="article-title">
+                            <a href="#${post.slug}" onclick="openArticle('${post.slug}'); return false;">${escapeHtml(post.title)}</a>
+                        </h2>
+                        <p class="article-excerpt">${escapeHtml(post.excerpt)}</p>
+                        <div style="margin-bottom: 16px;">
+                            ${post.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+                        </div>
+                        <a href="#${post.slug}" class="read-more" onclick="openArticle('${post.slug}'); return false;">
+                            阅读全文
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </article>
+                `;
+            }
+            container.innerHTML = html;
+        }
+
+        function findPostBySlug(posts, slug) {
+            if (!posts || !slug) return null;
+            let decodedSlug;
+            try { decodedSlug = decodeURIComponent(slug); } catch (e) { decodedSlug = slug; }
+            return posts.find(p => p.slug === slug || p.slug === decodedSlug || encodeURIComponent(p.slug) === slug);
+        }
+
+        async function openArticle(slug) {
+            const posts = await fetchPostList();
+            const post = findPostBySlug(posts, slug);
+            if (!post) {
+                await renderHome();
+                showPage('home');
+                return;
+            }
+            const el = document.getElementById('single-article-content');
+            if (!el) return;
+            const contentHtml = marked.parse(post.rawContent);
+            el.innerHTML = `
+                <div class="article-meta">${escapeHtml(post.date)} · ${escapeHtml(post.category)}</div>
+                <h1 class="article-title">${escapeHtml(post.title)}</h1>
+                <div style="margin-bottom: 24px;">${post.tags.map(t => `<span class="tag">${escapeHtml(t)}</span>`).join('')}</div>
+                <div class="article-content">${contentHtml}</div>
+            `;
+            loadGiscus(post.slug);
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('single').classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            history.replaceState(null, '', '#' + encodeURIComponent(post.slug));
+        }
+
+        async function goBackToHome() {
+            await renderHome();
+            showPage('home');
+        }
+
+        function loadGiscus(term) {
+            const container = document.getElementById('giscus-comments');
+            if (!container) return;
+            container.innerHTML = '';
+            const script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', 'mangchenofficial/neocnpinglun');
+            script.setAttribute('data-repo-id', 'R_kgDOSsguWQ');
+            script.setAttribute('data-category', 'Announcements');
+            script.setAttribute('data-category-id', 'DIC_kwDOSsguWc4C-LCr');
+            script.setAttribute('data-mapping', 'specific');
+            script.setAttribute('data-term', term);
+            script.setAttribute('data-strict', '0');
+            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-emit-metadata', '0');
+            script.setAttribute('data-input-position', 'bottom');
+            script.setAttribute('data-theme', 'preferred_color_scheme');
+            script.setAttribute('data-lang', 'zh-CN');
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+            container.appendChild(script);
+        }
+
+        // 深色模式切换（保留原有逻辑）
+        const toggleBtn = document.getElementById('themeToggle');
+        if (toggleBtn) {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                document.body.classList.add('dark');
+                toggleBtn.textContent = '亮色模式';
+            }
+            toggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+                const isDark = document.body.classList.contains('dark');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                toggleBtn.textContent = isDark ? '亮色模式' : '深色模式';
+            });
+        }
+
+        // 搜索过滤文章（适配动态生成的文章卡片）
+        function filterArticles() {
+            const keyword = document.getElementById('searchInput')?.value.trim().toLowerCase() || '';
+            const cards = document.querySelectorAll('#articlesContainer .article-card');
+            cards.forEach(card => {
+                const title = card.querySelector('.article-title')?.innerText.toLowerCase() || '';
+                const tags = Array.from(card.querySelectorAll('.tag')).map(t => t.innerText.toLowerCase()).join(' ');
+                const excerpt = card.querySelector('.article-excerpt')?.innerText.toLowerCase() || '';
+                const match = title.includes(keyword) || tags.includes(keyword) || excerpt.includes(keyword);
+                card.style.display = match ? '' : 'none';
+            });
+        }
+
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', async function(e) {
+                e.preventDefault();
+                const page = this.dataset.page;
+                if (page === 'home') {
+                    await renderHome();
+                }
+                showPage(page);
+            });
+        });
+
+        window.addEventListener('hashchange', async function() {
+            const hash = window.location.hash.slice(1);
+            if (!hash) {
+                await renderHome();
+                showPage('home');
+                return;
+            }
+            if (['home', 'about', 'friends', 'download'].includes(hash)) {
+                if (hash === 'home') await renderHome();
+                showPage(hash);
+                return;
+            }
+            await openArticle(hash);
+        });
+
+        window.addEventListener('load', async function() {
+            const hash = window.location.hash.slice(1);
+            if (!hash) {
+                await renderHome();
+                showPage('home');
+                return;
+            }
+            if (['home', 'about', 'friends', 'download'].includes(hash)) {
+                if (hash === 'home') await renderHome();
+                showPage(hash);
+                return;
+            }
+            await openArticle(hash);
+        });
+
+        // 绑定搜索输入
+        const searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', filterArticles);
+        }
+
+    </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"b5053cd8cfbb454d991aa4b3e7a84537","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+</html>
